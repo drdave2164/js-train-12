@@ -8,17 +8,20 @@ function createDictionary(entries) {
   // Створення порожнього словника
   // Використання методу forEach для перебору масиву пар ключ-значення
   // Додавання пари ключ-значення до словника за допомогою методу set
+  const dict = new Map();
+  entries.forEach(([key, value]) => dict.set(key, value));
+  return dict;
 }
 
 // Приклад використання функції createDictionary
-console.log("Завдання: 1 ==============================");
+console.log('Завдання: 1 ==============================');
 
 console.log(
   createDictionary([
-    ["apple", "яблуко"],
-    ["banana", "банан"],
-    ["orange", "апельсин"],
-  ])
+    ['apple', 'яблуко'],
+    ['banana', 'банан'],
+    ['orange', 'апельсин'],
+  ]),
 );
 // Виведе:
 // Map(3) {
@@ -40,15 +43,26 @@ function convertMapToObject(map) {
   // Перебираємо ключі та значення в словнику
   // Додаємо ключ та значення до об'єкту
   // Повертаємо отриманий об'єкт
+
+  //============Чи можна було тaк зробити?????????????==============
+  // 	 const obj = Object.fromEntries(map);
+  //    return obj;
+  //================================================================
+
+  const obj = {};
+  for (const [key, value] of map) {
+    obj[key] = value;
+  }
+  return obj;
 }
 
 // Приклад використання функції convertMapToObject
-console.log("Завдання: 2 ==============================");
+console.log('Завдання: 2 ==============================');
 
 let someMap = new Map([
-  ["name", "John"],
-  ["age", 30],
-  ["city", "New York"],
+  ['name', 'John'],
+  ['age', 30],
+  ['city', 'New York'],
 ]);
 
 console.log(convertMapToObject(someMap));
@@ -65,22 +79,27 @@ function setValue(dictionary, key, value) {
   // Перевірка, чи існує вже ключ у словнику
   // Якщо ключ вже існує, встановлюємо для нього нове значення в верхньому регістрі
   // Якщо ключ не існує, додаємо нову пару ключ-значення до словника де значення буде таким же як ключ
+  if (dictionary.has(key)) {
+    return dictionary.set(key, value.toUpperCase());
+  } else {
+    return dictionary.set(key, (value = key));
+  }
 }
 
 // Приклад використання функції setValue
-console.log("Завдання: 3 ==============================");
+console.log('Завдання: 3 ==============================');
 
 // Встановлення нового значення для ключа "banana"
 console.log(
   setValue(
     new Map([
-      ["apple", "яблуко"],
-      ["banana", "банан"],
-      ["orange", "апельсин"],
+      ['apple', 'яблуко'],
+      ['banana', 'банан'],
+      ['orange', 'апельсин'],
     ]),
-    "banana",
-    "новий банан"
-  )
+    'banana',
+    'новий банан',
+  ),
 );
 // Виведе:
 // Map(3) {
@@ -100,20 +119,25 @@ function deleteKey(dictionary, key) {
   // Перевірка, чи існує ключ у словнику
   // Якщо ключ існує, видаляємо його та відповідне значення
   // Якщо ключ не знайдено, повертаємо false
+  if (dictionary.has(key)) {
+    return dictionary.delete(key);
+  } else {
+    return false;
+  }
 }
 
 // Приклад використання функції deleteKey
-console.log("Завдання: 4 ==============================");
+console.log('Завдання: 4 ==============================');
 
 console.log(
   deleteKey(
     new Map([
-      ["apple", "яблуко"],
-      ["banana", "банан"],
-      ["orange", "апельсин"],
+      ['apple', 'яблуко'],
+      ['banana', 'банан'],
+      ['orange', 'апельсин'],
     ]),
-    "banana"
-  )
+    'banana',
+  ),
 ); // true
 
 // Завдання: 5
@@ -129,23 +153,30 @@ function getKeysStartingWith(dictionary, letter) {
   // Перевірка, чи ключ починається з заданої букви
   // Якщо ключ починається з заданої букви, додаємо його до масиву
   // Повертаємо масив
+  const arr = [];
+  for (const [key, value] of dictionary) {
+    if (key[0] === letter) {
+      arr.push(key);
+    }
+  }
+  return arr;
 }
 
 // Приклад використання функції getKeysStartingWith
-console.log("Завдання: 5 ==============================");
+console.log('Завдання: 5 ==============================');
 
 // Отримання ключів, які починаються з букви "g"
 console.log(
   getKeysStartingWith(
     new Map([
-      ["apple", "яблуко"],
-      ["banana", "банан"],
-      ["orange", "апельсин"],
-      ["grape", "виноград"],
-      ["pear", "груша"],
+      ['apple', 'яблуко'],
+      ['banana', 'банан'],
+      ['orange', 'апельсин'],
+      ['grape', 'виноград'],
+      ['pear', 'груша'],
     ]),
-    "g"
-  )
+    'g',
+  ),
 ); // Виведе: [ 'grape' ]
 
 // Завдання: 6
@@ -163,21 +194,33 @@ function addKeyValuePairs(dictionary, entries) {
   // Якщо ключ є унікальним, додаємо його до словника за допомогою методу set та збільшимо added на 1
   // Якщо ключ не є унікальним, збільшимо rejected на 1
   // Повертаємо об'єкт з dictionary, added, rejected
+  let added = 0;
+  let rejected = 0;
+
+  entries.forEach(([key, value]) => {
+    if (!dictionary.has(key)) {
+      dictionary.set(key, value);
+      added++;
+    } else {
+      rejected++;
+    }
+  });
+  return { dictionary, added, rejected };
 }
 
-console.log("Завдання: 6 ==============================");
+console.log('Завдання: 6 ==============================');
 
 console.log(
   addKeyValuePairs(
     new Map([
-      ["user1", { name: "John", age: 24 }],
-      ["user2", { name: "Emma", age: 28 }],
+      ['user1', { name: 'John', age: 24 }],
+      ['user2', { name: 'Emma', age: 28 }],
     ]),
     [
-      ["user3", { name: "Bob", age: 33 }],
-      ["user2", { name: "Alice", age: 25 }],
-    ]
-  )
+      ['user3', { name: 'Bob', age: 33 }],
+      ['user2', { name: 'Alice', age: 25 }],
+    ],
+  ),
 );
 // Виведе: {
 //   dictionary: Map(3)
@@ -203,18 +246,32 @@ function transformDictionary(dictionary) {
   // Використовуємо цикл for...of і метод entries для перебору пар ключ-значення словника
   // Додаємо кожну пару ключ-значення до масиву entries за допомогою методу push
   // Повертаємо об'єкт, який містить масиви ключів (властивість keys), значень (властивість values) і пар ключ-значення (властивість entries)
+  const arrKeys = [];
+  const arrValues = [];
+  const arrEntries = [];
+
+  for (const key of dictionary.keys()) {
+    arrKeys.push(key);
+  }
+  for (const value of dictionary.values()) {
+    arrValues.push(value);
+  }
+  for (const entries of dictionary.entries()) {
+    arrEntries.push(entries);
+  }
+  return { arrKeys, arrValues, arrEntries };
 }
 
-console.log("Завдання: 7 ==============================");
+console.log('Завдання: 7 ==============================');
 
 console.log(
   transformDictionary(
     new Map([
-      ["car", "автомобіль"],
-      ["bus", "автобус"],
-      ["bicycle", "велосипед"],
-    ])
-  )
+      ['car', 'автомобіль'],
+      ['bus', 'автобус'],
+      ['bicycle', 'велосипед'],
+    ]),
+  ),
 );
 // Виведе: {
 //    keys: [ 'car', 'bus', 'bicycle' ],
@@ -238,19 +295,24 @@ function checkPresence(dictionary, keys) {
   // Використовуємо цикл forEach для перебору масиву ключів
   // Додаємо результат перевірки (true або false) до масиву presence при наявності ключа у словнику
   // Повертаємо масив
+  const presence = [];
+  keys.forEach((key) => {
+    presence.push(dictionary.has(key));
+  });
+  return presence;
 }
 
-console.log("Завдання: 8 ==============================");
+console.log('Завдання: 8 ==============================');
 
 console.log(
   checkPresence(
     new Map([
-      ["car", "автомобіль"],
-      ["chair", "стілець"],
-      ["computer", "комп'ютер"],
+      ['car', 'автомобіль'],
+      ['chair', 'стілець'],
+      ['computer', "комп'ютер"],
     ]),
-    ["car", "book", "chair"]
-  )
+    ['car', 'book', 'chair'],
+  ),
 );
 // Виведе: [true, false, true]
 
@@ -266,21 +328,29 @@ function getFilteredDictionarySize(dictionary, filter) {
   // Використовуємо for...of цикл разом з методом entries() для перебору пар [ключ, значення] словника
   // Якщо пара [ключ, значення] відповідає фільтру, додаємо її до фільтрованого словника
   // Повертаємо розмір фільтрованого словника, використовуючи властивість size
+  const map = new Map();
+
+  for (const [key, value] of dictionary.entries()) {
+    if (filter(key, value)) {
+      map.set(key, value);
+    }
+  }
+  return map.size;
 }
 
-console.log("Завдання: 9 ==============================");
+console.log('Завдання: 9 ==============================');
 
 console.log(
   getFilteredDictionarySize(
     new Map([
-      ["Kyiv", 2884000],
-      ["Kharkiv", 1446000],
-      ["Odesa", 993120],
-      ["Dnipro", 990724],
-      ["Lviv", 721301],
+      ['Kyiv', 2884000],
+      ['Kharkiv', 1446000],
+      ['Odesa', 993120],
+      ['Dnipro', 990724],
+      ['Lviv', 721301],
     ]),
-    (key, value) => value > 1000000
-  )
+    (key, value) => value > 1000000,
+  ),
 );
 // Виведе: 2, оскільки лише два міста мають населення більше ніж 1 мільйон
 
@@ -294,20 +364,28 @@ function sortByValues(dictionary) {
   // Конвертуємо словник в масив пар ключ-значення за допомогою оператора деструктурізації
   // Сортуємо масив пар ключ-значення за значеннями в порядку спадання
   // Конвертуємо відсортований масив пар ключ-значення назад у словник
+  const arr = [...dictionary];
+  arr.sort(([key, value], [key1, value1]) => {
+    return value1 - value;
+  });
+  return new Map(arr);
 }
 
-console.log("Завдання: 10 ==============================");
+console.log('Завдання: 10 ==============================');
 
 console.log(
   sortByValues(
     new Map([
-      ["Harry Potter and the Philosopher's Stone", 120000000],
-      ["The Little Prince", 200000000],
-      ["The Hobbit", 100000000],
-      ["And Then There Were None", 100000000],
-      ["Dream of the Red Chamber", 100000000],
-    ])
-  )
+      [
+        "Harry Potter and the Philosopher's Stone",
+        120000000,
+      ],
+      ['The Little Prince', 200000000],
+      ['The Hobbit', 100000000],
+      ['And Then There Were None', 100000000],
+      ['Dream of the Red Chamber', 100000000],
+    ]),
+  ),
 );
 // Виведе: Map {
 // 'The Little Prince' => 200000000,
@@ -330,19 +408,19 @@ function resetDictionary(dictionary, maxSize) {
   // Повертаємо false, оскільки кількість елементів не перевищує максимально допустиму, тому словник не був очищений
 }
 
-console.log("Завдання: 11 ==============================");
+console.log('Завдання: 11 ==============================');
 
 console.log(
   resetDictionary(
     new Map([
-      ["Kyiv", 2884000],
-      ["Kharkiv", 1446000],
-      ["Odesa", 993120],
-      ["Dnipro", 990724],
-      ["Lviv", 721301],
+      ['Kyiv', 2884000],
+      ['Kharkiv', 1446000],
+      ['Odesa', 993120],
+      ['Dnipro', 990724],
+      ['Lviv', 721301],
     ]),
-    3
-  )
+    3,
+  ),
 );
 // Виведе: true, оскільки у словнику було 5 елементів, що більше ніж maxSize = 3
 
@@ -361,16 +439,25 @@ function convertDictionaryToSet(dictionary) {
   // Якщо ключ є рядком, переводимо його в верхній регістр і додаємо до множини
   // Якщо ключ є числом, збільшуємо його на 1 і додаємо до множини
   // Повертаємо отриману множину
+  const result = new Set();
+  dictionary.forEach((value, key) => {
+    if (typeof key === 'string') {
+      result.add(key.toUpperCase());
+    } else if (typeof key === 'number') {
+      result.add(key + 1);
+    }
+  });
+  return result;
 }
 
 // Приклад використання функції convertDictionaryToSet
-console.log("Завдання: 12 ==============================");
+console.log('Завдання: 12 ==============================');
 
 let mixedDictionary = new Map([
-  ["apple", "red"],
-  ["banana", "yellow"],
-  [1, "one"],
-  [2, "two"],
+  ['apple', 'red'],
+  ['banana', 'yellow'],
+  [1, 'one'],
+  [2, 'two'],
 ]);
 
 console.log(convertDictionaryToSet(mixedDictionary));
@@ -389,12 +476,19 @@ function convertSetToDictionary(set) {
   // Перебираємо елементи множини
   // Додаємо елемент в словник з ключем, який дорівнює елементу, та значенням, яке дорівнює коду його першого символу
   // Повертаємо отриманий словник
+  const dictionary = new Map();
+
+  for (let element of set) {
+    dictionary.set(element, element.charCodeAt(0));
+  }
+
+  return dictionary;
 }
 
 // Приклад використання функції convertSetToDictionary
-console.log("Завдання: 13 ==============================");
+console.log('Завдання: 13 ==============================');
 
-let someSet = new Set(["apple", "banana", "1", "2"]);
+let someSet = new Set(['apple', 'banana', '1', '2']);
 
 console.log(convertSetToDictionary(someSet));
 // Виведе: Map { 'apple' => 97, 'banana' => 98, '1' => 49, '2' => 50 }
